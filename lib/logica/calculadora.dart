@@ -102,7 +102,7 @@ class Calculadora {
     } else {
       resultado = "Contigencia";
     }
-    return [operandosOrganizados];
+    return [operandosOrganizados,resultado];
   }
 
   isOperador(expresion) {

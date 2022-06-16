@@ -59,32 +59,33 @@ void main() {
     var calculadora = Calculadora();
     calculadora.expresion = "( A v Q) → (A v Q)";
     var resultado = calculadora.calcular();
-    expect(resultado, {
+    expect(resultado[0], {
       'A': [0, 0, 1, 1],
       'Q': [0, 1, 0, 1],
       "(AvQ)": [0, 1, 1, 1],
       "((AvQ)→(AvQ))": [1, 1, 1, 1]
     });
-    print(resultado);
+    print(resultado[0]);
   });
   test('Prueba calcular resultado 2 con negacion', () {
     var calculadora = Calculadora();
     calculadora.expresion = "~( A v Q) → (A v Q)";
     var resultado = calculadora.calcular();
-    expect(resultado, {
+    expect(resultado[0], {
       'A': [0, 0, 1, 1],
       'Q': [0, 1, 0, 1],
       "(AvQ)": [0, 1, 1, 1],
       "(~(AvQ))": [1, 0, 0, 0],
       "((~(AvQ))→(AvQ))": [0, 1, 1, 1]
     });
-    print(resultado);
+    print(resultado[0]);
+    print(resultado[1]);
   });
   test('Prueba calcular resultado 3 con negacion', () {
     var calculadora = Calculadora();
     calculadora.expresion = "~( A v Q) → ~A v Q)";
     var resultado = calculadora.calcular();
-    expect(resultado, {
+    expect(resultado[0], {
       'A': [0, 0, 1, 1],
       'Q': [0, 1, 0, 1],
       "(AvQ)": [0, 1, 1, 1],
@@ -93,6 +94,15 @@ void main() {
       "((~A)vQ)": [1, 1, 0, 1],
       "((~(AvQ))→((~A)vQ))": [1, 1, 1, 1]
     });
-    print(resultado);
+    print(resultado[0]);
+  });
+  //#--------------------------------
+  test('Prueba verifica resultado ', () {
+    var calculadora = Calculadora();
+    calculadora.expresion = "( A v Q) ↔ ~(A v Q)";
+    var resultado = calculadora.calcular();
+    expect(resultado[1], "Contradiccion");
+    print(resultado[0]);
+    print(resultado[1]);
   });
 }

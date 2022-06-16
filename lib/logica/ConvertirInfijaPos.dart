@@ -5,10 +5,10 @@ class Convertir {
   List<String> listaExpresion = [];
   final listaExpreRegulares = [
     RegExp(r'~'),
-    RegExp(r'^'),
+    RegExp(r'\^'),
     RegExp(r'v'),
-    RegExp(r'[->]'),
-    RegExp(r'[<->]')
+    RegExp(r'→'),
+    RegExp(r'↔')
   ];
 
   set expresion(var valor) => _expresion = valor;
@@ -16,8 +16,29 @@ class Convertir {
   get expresion => _expresion;
 
   void convertirAlista() {
-    var listaoperadores = expresion.split(" ");
-    listaExpresion = listaoperadores;
+    expresion = expresion.toString().replaceAll(" ", "");
+    var listaExpreComparar = [
+      RegExp(r'~'),
+      RegExp(r'\^'),
+      RegExp(r'v'),
+      RegExp(r'\→'),
+      RegExp(r'\↔'),
+      RegExp(r'[A-Z]'),
+      RegExp(r'\('),
+      RegExp(r'\)')
+    ];
+    while (expresion.toString().isNotEmpty) {
+      for (var i in listaExpreComparar) {
+        var firstmatch = i.firstMatch(expresion.toString());
+        if (firstmatch != null && firstmatch.start == 0) {
+          listaExpresion.add(
+              expresion.toString().substring(firstmatch.start, firstmatch.end));
+          expresion = expresion
+              .toString()
+              .replaceFirst(firstmatch.group(0).toString(),'');
+        }
+      }
+    }
   }
 
   String posFIja() {
@@ -42,7 +63,7 @@ class Convertir {
           listaExpresion[posIncial] != ")") {
         while (pila.empty() == false &&
             comparar(pila.peek(), listaExpresion[posIncial])) {
-            listaSalida.add(pila.pop());
+          listaSalida.add(pila.pop());
         }
         pila.push(listaExpresion[posIncial]);
         listaExpresion.removeAt(posIncial);
@@ -63,7 +84,7 @@ class Convertir {
   prioridad(String valor) {
     if (valor.contains("(")) {
       return 0;
-    }else if (listaExpreRegulares[0].hasMatch(valor)) {
+    } else if (listaExpreRegulares[0].hasMatch(valor)) {
       return 5;
     } else if (listaExpreRegulares[1].hasMatch(valor)) {
       return 4;
@@ -73,7 +94,7 @@ class Convertir {
       return 2;
     } else if (listaExpreRegulares[4].hasMatch(valor)) {
       return 1;
-    } 
+    }
   }
 }
 
